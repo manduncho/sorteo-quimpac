@@ -57,7 +57,8 @@ export default function LotteryPage() {
   const [isAnimating, setIsAnimating] = useState(false);
   const [animationStarted, setAnimationStarted] = useState(false);
   const [showContinueButton, setShowContinueButton] = useState(false);
-  const [showWinnerAnimation, setShowWinnerAnimation] = useState(false);
+  const [showColorTransition, setShowColorTransition] = useState(false);
+  const [showZoomAnimation, setShowZoomAnimation] = useState(false);
 
   const animationRef = useRef<number | null>(null);
   const startTimeRef = useRef<number>(0);
@@ -133,12 +134,24 @@ export default function LotteryPage() {
         setCurrentParticipant(selectedWinner);
         setIsAnimating(false);
         
-        // Show winner animation after 2 seconds delay
-        setTimeout(() => {
-          setShowWinnerAnimation(true);
-        }, 2000);
+        // Timeline:
+        // 0s: Winner shown (still with red background)
+        // 1s: Start color transition (1 second)
+        // 2s: Color transition complete, stay still (1 second)
+        // 3s: Start zoom animation (1 second)
+        // 4s: All animations complete, show continue button
         
-        // Show continue button after animation (2s delay + 1s animation + buffer)
+        // Show color transition after 1 second delay
+        setTimeout(() => {
+          setShowColorTransition(true);
+        }, 1000);
+        
+        // Show zoom animation after 3 seconds delay (1s wait + 1s color + 1s still)
+        setTimeout(() => {
+          setShowZoomAnimation(true);
+        }, 3000);
+        
+        // Show continue button after all animations complete (4 seconds total)
         setTimeout(() => {
           setShowContinueButton(true);
         }, 4000);
@@ -155,7 +168,8 @@ export default function LotteryPage() {
     setAnimationStarted(true);
     setWinner(null);
     setShowContinueButton(false);
-    setShowWinnerAnimation(false);
+    setShowColorTransition(false);
+    setShowZoomAnimation(false);
     startTimeRef.current = 0;
     
     // Pick initial participant
@@ -257,11 +271,11 @@ export default function LotteryPage() {
       {/* Animation Container - Centered */}
       {currentParticipant && (
         <div 
-          className={`absolute bottom-[20%] left-0 right-0 flex flex-col items-center z-10 ${showWinnerAnimation ? 'animate-winner-shake' : ''}`}
+          className={`absolute bottom-[20%] left-0 right-0 flex flex-col items-center z-10 ${showZoomAnimation ? 'animate-winner-zoom' : ''}`}
         >
           {/* Name */}
           <span 
-            className="animation-name-box"
+            className={`animation-name-box ${showColorTransition ? 'animate-color-transition' : ''}`}
             style={{ 
               fontSize: `${calculateFontSize(currentParticipant.fullName, true)}px`,
               lineHeight: 1.2,
@@ -272,7 +286,7 @@ export default function LotteryPage() {
           
           {/* Position */}
           <span 
-            className="animation-position-box"
+            className={`animation-position-box ${showColorTransition ? 'animate-position-color-transition' : ''}`}
             style={{ 
               fontSize: `${calculateFontSize(currentParticipant.position, false)}px`,
               lineHeight: 1.3,

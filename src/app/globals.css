@@ -187,7 +187,7 @@ body {
 	height: 100%;
 }
 
-/* Winner shake animation */
+/* Winner shake animation - OLD */
 @keyframes winner-shake {
 	0%, 100% {
 		transform: translateX(0);
@@ -202,6 +202,57 @@ body {
 
 .animate-winner-shake {
 	animation: winner-shake 1s ease-in-out;
+}
+
+/* Winner zoom animation - NEW */
+@keyframes winner-zoom {
+	0% {
+		transform: scale(0.8);
+		opacity: 0.7;
+	}
+	50% {
+		transform: scale(1.15);
+		opacity: 1;
+	}
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+.animate-winner-zoom {
+	animation: winner-zoom 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Color transition animation for winner boxes */
+@keyframes winner-color-transition {
+	0% {
+		background-color: #b40e26;
+		color: white;
+	}
+	100% {
+		background-color: #ffa202;
+		color: #b40e26;
+	}
+}
+
+@keyframes winner-position-color-transition {
+	0% {
+		background-color: rgba(180, 14, 38, 0.6);
+		color: white;
+	}
+	100% {
+		background-color: rgba(255, 162, 2, 0.8);
+		color: #b40e26;
+	}
+}
+
+.animate-color-transition {
+	animation: winner-color-transition 1s ease-in-out forwards;
+}
+
+.animate-position-color-transition {
+	animation: winner-position-color-transition 1s ease-in-out forwards;
 }
 
 /* Page layout */
